@@ -31,9 +31,9 @@ describe('cool utils', () => {
     const result = myFn(users, cars, 150)
     expect(result.arr1.length).toBe(3)
   })
-  /*
+
   it('correct 2', () => {
     const result = myFn(users, cars, 150)
     expect(result.followers).toBe(154)
-  })*/
+  })
 })

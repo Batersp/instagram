@@ -11,6 +11,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 
 @Injectable()
 export class AuthService {
+  baseUrl = environment.baseUrl;
   isAuth = false
 
   resolveAuthRequest: Function = () => {}
@@ -24,6 +25,9 @@ export class AuthService {
     private router: Router,
     private notificationService: NotificationService
   ) {}
+  public getRouter(): Router {
+    return this.router;
+  }
   login(data: LoginRequestData) {
     this.http
       .post<CommonResponseType<{ userId: number }>>(`${environment.baseUrl}/auth/login`, data)
