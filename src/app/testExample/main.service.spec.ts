@@ -3,27 +3,31 @@ import { TestBed } from '@angular/core/testing'
 import { OptionService } from 'src/app/testExample/option.service'
 
 describe('MainService', () => {
-  let service: MainService
-  let optionService: OptionService
+  let service: MainService;
+  let optionService: OptionService;
 
-  const fakeOptionService = jasmine.createSpyObj(['returnString'])
+  const fakeOptionService = jasmine.createSpyObj(['returnString']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [MainService, { provide: OptionService, useValue: fakeOptionService }],
-    })
+    });
     service = TestBed.inject(MainService)
     optionService = TestBed.inject(OptionService)
-  })
+  });
 
   it('should created', () => {
-    expect(service).toBeDefined()
-  })
+    expect(service).toBeDefined();
+  });
 
-  it('', () => {
-    fakeOptionService.returnString.and.returnValue('Hi')
-    const res = service.newMethod()
-    expect(res).toBe('Hi')
-    expect(fakeOptionService.returnString)
-  })
-})
+  it('newMethod() should call returnString()' , () => {
+    service.newMethod();
+    expect(fakeOptionService.returnString).toHaveBeenCalled();
+  });
+
+  it('returnValue() should return value', () => {
+    const result = service.returnValue(1);
+    expect(result).toBe(1);
+  });
+
+});
