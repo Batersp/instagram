@@ -11,7 +11,9 @@ import { Notify } from 'src/app/core/models/notify.models'
 export class NotifyComponent implements OnInit {
   notify$?: Observable<Notify | null>
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit(): void {
     //subscribe
