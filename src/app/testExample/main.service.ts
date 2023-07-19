@@ -5,13 +5,16 @@ import { OptionService } from 'src/app/testExample/option.service'
   providedIn: 'root',
 })
 export class MainService {
-  constructor(private optionService: OptionService) {}
+  constructor(private optionService: OptionService) {
+    this.optionService = optionService;
+    this.optionService.returnString();
+  }
 
-  returnValue(value: number) {
+  returnValue(value: number): number {
     return value
   }
 
-  newMethod() {
+  newMethod(): string {
     return this.optionService.returnString()
   }
 }

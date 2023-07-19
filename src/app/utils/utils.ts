@@ -7,6 +7,7 @@ export type UserType = {
   children: string[]
 }
 
+//Utills
 export type UsersType = UserType[]
 
 export const myFn = (arr1: UsersType, arr2: CarsType, followers: number) => {

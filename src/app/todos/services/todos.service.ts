@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs'
 import { DomainTodo, FilterType, Todo } from 'src/app/todos/models/todos.models'
 import { CommonResponseType } from 'src/app/core/models/core.models'
 import { map } from 'rxjs/operators'
+import { LoggerService } from '../../logger.service'
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,10 @@ import { map } from 'rxjs/operators'
 export class TodosService {
   todos$ = new BehaviorSubject<DomainTodo[]>([])
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService,
+  ) {}
 
   getTodos() {
     this.http
@@ -25,7 +29,8 @@ export class TodosService {
       )
       .subscribe(res => {
         this.todos$.next(res)
-      })
+      });
+    this.logger.log('Todo-lists order request posted');
   }
 
   addTodo(title: string) {
@@ -45,7 +50,8 @@ export class TodosService {
 
       .subscribe((res: DomainTodo[]) => {
         this.todos$.next(res)
-      })
+      });
+    this.logger.log('AddTodo request posted');
   }
 
   deleteTodo(todoId: string) {
@@ -59,7 +65,8 @@ export class TodosService {
       )
       .subscribe(todos => {
         this.todos$.next(todos)
-      })
+      });
+    this.logger.log('DeleteTodo request posted');
   }
   updateTodoTitle(todoId: string, title: string) {
     this.http

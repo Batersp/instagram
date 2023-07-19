@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from 'src/app/core/services/auth.service'
+import { LoggerService } from '../../../logger.service'
 
 @Component({
   selector: 'tl-login',
@@ -17,18 +18,22 @@ export class LoginComponent {
     rememberMe: new FormControl(false),
   })
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private logger: LoggerService,
+  ) {}
 
   get email() {
-    return this.loginForm.get('email')
+    return this.loginForm.get('email');
   }
 
   get password() {
-    return this.loginForm.get('password')
+    return this.loginForm.get('password');
   }
 
   onLoginSubmit() {
-    const value = this.loginForm.value
-    this.authService.login(value)
+    const value = this.loginForm.value;
+    this.authService.login(value);
+    this.logger.log('Login attempted');
   }
 }

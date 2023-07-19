@@ -8,9 +8,12 @@ import { LoginRequestData, MeResponse } from 'src/app/core/models/auth.models'
 import { EMPTY } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { NotificationService } from 'src/app/core/services/notification.service'
+import { LoggerService } from '../../logger.service'
+
 
 @Injectable()
 export class AuthService {
+  baseUrl = environment.baseUrl;
   isAuth = false
 
   resolveAuthRequest: Function = () => {}
@@ -22,8 +25,13 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private logger: LoggerService,
   ) {}
+  public getRouter(): Router {
+    this.logger.log('Router is called');
+    return this.router;
+  }
   login(data: LoginRequestData) {
     this.http
       .post<CommonResponseType<{ userId: number }>>(`${environment.baseUrl}/auth/login`, data)
@@ -34,7 +42,8 @@ export class AuthService {
         } else {
           this.notificationService.handleError(res.messages[0])
         }
-      })
+      });
+    this.logger.log('Login request posted');
   }
   logout() {
     this.http
@@ -44,7 +53,8 @@ export class AuthService {
         if (res.resultCode === ResultCodeEnum.success) {
           this.router.navigate(['/login'])
         }
-      })
+      });
+    this.logger.log('Logout request posted');
   }
 
   me() {
@@ -56,7 +66,8 @@ export class AuthService {
           this.isAuth = true
         }
         this.resolveAuthRequest()
-      })
+      });
+    this.logger.log('Received response from server');
   }
   private errorHandler(err: HttpErrorResponse) {
     this.notificationService.handleError(err.message)

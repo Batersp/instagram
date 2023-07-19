@@ -10,13 +10,17 @@ import {
 import { environment } from 'src/environments/environment'
 import { map } from 'rxjs/operators'
 import { CommonResponseType } from 'src/app/core/models/core.models'
+import { LoggerService } from '../../logger.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class TasksService {
   tasks$ = new BehaviorSubject<DomainTask>({})
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private logger: LoggerService,
+  ) {}
   getTasks(todoId: string) {
     this.http
       .get<GetTasksResponse>(`${environment.baseUrl}/todo-lists/${todoId}/tasks`)
@@ -25,7 +29,8 @@ export class TasksService {
         const stateTasks = this.tasks$.getValue()
         stateTasks[todoId] = res
         this.tasks$.next(stateTasks)
-      })
+      });
+    this.logger.log('Tasks order request posted');
   }
   addTask(todoId: string, title: string) {
     this.http
@@ -44,7 +49,8 @@ export class TasksService {
       )
       .subscribe(res => {
         this.tasks$.next(res)
-      })
+      });
+    this.logger.log('AddTask request posted');
   }
   deleteTask(todoId: string, taskId: string) {
     this.http
@@ -59,7 +65,8 @@ export class TasksService {
       )
       .subscribe(res => {
         this.tasks$.next(res)
-      })
+      });
+    this.logger.log('DeleteTask request posted');
   }
 
   updateTask(todoId: string, taskId: string, newTask: UpdateTaskRequest) {
@@ -82,5 +89,6 @@ export class TasksService {
       .subscribe(res => {
         this.tasks$.next(res)
       })
+    this.logger.log('UpdateTask request posted');
   }
 }
